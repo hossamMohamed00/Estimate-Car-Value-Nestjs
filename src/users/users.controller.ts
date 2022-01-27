@@ -7,7 +7,9 @@ import {
   Param,
   Patch,
   Post,
-  Query
+  Query,
+  UseInterceptors,
+  ClassSerializerInterceptor
 } from '@nestjs/common';
 import {
   ApiBody,
@@ -18,9 +20,9 @@ import {
   ApiQuery,
   ApiTags
 } from '@nestjs/swagger';
+import { SerializeInterceptor } from 'src/Interceptors/serialize.interceptor';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
-import { User } from './user.entity';
 import { UsersService } from './users.service';
 
 @Controller('auth')
@@ -41,8 +43,11 @@ export class UsersController {
    * @param id user id
    * @returns User
    */
+  @UseInterceptors(SerializeInterceptor)
   @Get('/:id')
   async findUser(@Param('id') id: string) {
+    console.log('Handling request... 🏃🏻‍♀️🏃🏻‍♀️');
+
     const user = await this.usersService.findOne(parseInt(id));
     if (!user) throw new NotFoundException('User not found ❌🙋🏻‍♂️');
     return user;
