@@ -20,7 +20,7 @@ import {
   ApiQuery,
   ApiTags
 } from '@nestjs/swagger';
-import { SerializeInterceptor } from 'src/Interceptors/serialize.interceptor';
+import { Serialize } from 'src/Interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
@@ -44,7 +44,7 @@ export class UsersController {
    * @param id user id
    * @returns User
    */
-  @UseInterceptors(new SerializeInterceptor(UserDto))
+  @Serialize(UserDto) // Or UseInterceptors(new SerializeInterceptor(dto));
   @Get('/:id')
   async findUser(@Param('id') id: string) {
     console.log('Handling request... 🏃🏻‍♀️🏃🏻‍♀️');
