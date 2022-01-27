@@ -27,6 +27,7 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
 
 @Controller('auth')
+@Serialize(UserDto)
 @ApiTags('Users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
@@ -44,11 +45,8 @@ export class UsersController {
    * @param id user id
    * @returns User
    */
-  @Serialize(UserDto) // Or UseInterceptors(new SerializeInterceptor(dto));
   @Get('/:id')
   async findUser(@Param('id') id: string) {
-    console.log('Handling request... 🏃🏻‍♀️🏃🏻‍♀️');
-
     const user = await this.usersService.findOne(parseInt(id));
     if (!user) throw new NotFoundException('User not found ❌🙋🏻‍♂️');
     return user;
