@@ -4,10 +4,14 @@ import { Observable } from 'rxjs';
 
 import { map } from 'rxjs/operators';
 import { plainToInstance } from 'class-transformer';
-import { UserDto } from 'src/users/dtos/user.dto';
 import { User } from 'src/users/user.entity';
 
 export class SerializeInterceptor implements NestInterceptor {
+  /**
+   * Accept any dto to serialize
+   * @param dto - Any dto to serialize the response as it.
+   */
+  constructor(private dto: any) {}
   intercept(
     context: ExecutionContext,
     next: CallHandler<any>
@@ -15,7 +19,7 @@ export class SerializeInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((userInstance: User) => {
         // Convert the user instance to match with the defined user dto.
-        return plainToInstance(UserDto, userInstance, {
+        return plainToInstance(this.dto, userInstance, {
           excludeExtraneousValues: true
         });
       })
