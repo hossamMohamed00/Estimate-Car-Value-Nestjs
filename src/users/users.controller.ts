@@ -3,11 +3,13 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   NotFoundException,
   Param,
   Patch,
   Post,
-  Query
+  Query,
+  Response
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Serialize } from 'src/Interceptors/serialize.interceptor';
@@ -15,19 +17,30 @@ import { UserDto } from './dtos/user.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
+import { AuthService } from './auth.service';
+import { SignInDto } from './dtos/signin-user.dto';
 
 @Controller('auth')
 @Serialize(UserDto)
 @ApiTags('Users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private authService: AuthService
+  ) {}
 
   /**
    * Create new user
    */
   @Post('/signup')
   createUser(@Body() body: CreateUserDto) {
-    this.usersService.create(body.email, body.password);
+    return this.authService.signUp(body.email, body.password);
+  }
+
+  @Post('/signin')
+  @HttpCode(200)
+  signIn(@Body() body: SignInDto) {
+    return this.authService.signIn(body.email, body.password);
   }
 
   /**

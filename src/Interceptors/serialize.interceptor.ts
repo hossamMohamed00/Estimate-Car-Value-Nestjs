@@ -36,7 +36,7 @@ export class SerializeInterceptor implements NestInterceptor {
   ): Observable<any> {
     return next.handle().pipe(
       map((userInstance: any) => {
-        // Convert the user instance to match with the defined user dto.
+        //* Convert the user instance to match with the defined user dto.
         return plainToInstance(this.dto, userInstance, {
           excludeExtraneousValues: true
         });
