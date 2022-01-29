@@ -7,19 +7,9 @@ import {
   Param,
   Patch,
   Post,
-  Query,
-  UseInterceptors,
-  ClassSerializerInterceptor
+  Query
 } from '@nestjs/common';
-import {
-  ApiBody,
-  ApiCreatedResponse,
-  ApiNotFoundResponse,
-  ApiOkResponse,
-  ApiOperation,
-  ApiQuery,
-  ApiTags
-} from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { Serialize } from 'src/Interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
