@@ -9,7 +9,7 @@ import {
   Patch,
   Post,
   Query,
-  Response
+  Session
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Serialize } from 'src/Interceptors/serialize.interceptor';
@@ -30,17 +30,51 @@ export class UsersController {
   ) {}
 
   /**
-   * Create new user
+   * @purpose - Find who currently logged in.
+   * @returns  user object
    */
-  @Post('/signup')
-  createUser(@Body() body: CreateUserDto) {
-    return this.authService.signUp(body.email, body.password);
+  @Get('/whoami')
+  whoAmI(@Session() session: any) {
+    return this.usersService.findOne(session.userId);
   }
 
+  /**
+   * @purpose - Sign user out.
+   */
+  @Post('/signout')
+  signout(@Session() session: any) {
+    session.userId = null;
+  }
+
+  /**
+   * @purpose - Create new user
+   * @Body {CreateUserDto}
+   * @return user object
+   */
+  @Post('/signup')
+  async createUser(@Body() body: CreateUserDto, @Session() session: any) {
+    const user = await this.authService.signUp(body.email, body.password);
+
+    //* Add userId to session
+    session.userId = user.id;
+
+    return user;
+  }
+
+  /**
+   * Sign in a user
+   * @Body {SignInDto}
+   * @return user object
+   */
   @Post('/signin')
   @HttpCode(200)
-  signIn(@Body() body: SignInDto) {
-    return this.authService.signIn(body.email, body.password);
+  async signIn(@Body() body: SignInDto, @Session() session: any) {
+    const user = await this.authService.signIn(body.email, body.password);
+
+    //* Add userId to session
+    session.userId = user.id;
+
+    return user;
   }
 
   /**

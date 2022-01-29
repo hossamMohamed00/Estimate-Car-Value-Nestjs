@@ -25,6 +25,7 @@ export class UsersService {
    * @returns  Promise<User>
    */
   findOne(id: number): Promise<User> {
+    if (!id) return null;
     return this.repo.findOne(id);
   }
 
