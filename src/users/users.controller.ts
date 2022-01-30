@@ -9,7 +9,8 @@ import {
   Patch,
   Post,
   Query,
-  Session
+  Session,
+  UseGuards
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Serialize } from 'src/Interceptors/serialize.interceptor';
@@ -19,6 +20,9 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dtos/signin-user.dto';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { User } from './user.entity';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('auth')
 @Serialize(UserDto)
@@ -34,14 +38,16 @@ export class UsersController {
    * @returns  user object
    */
   @Get('/whoami')
-  whoAmI(@Session() session: any) {
-    return this.usersService.findOne(session.userId);
+  @UseGuards(AuthGuard)
+  whoAmI(@CurrentUser() user: User) {
+    return user;
   }
 
   /**
    * @purpose - Sign user out.
    */
   @Post('/signout')
+  @HttpCode(200)
   signout(@Session() session: any) {
     session.userId = null;
   }
