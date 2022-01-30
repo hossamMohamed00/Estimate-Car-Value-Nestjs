@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  //? Setup Swagger
+  //? Setup Swagger API Docs
   const config = new DocumentBuilder()
     .setTitle('Car Value 🚗')
     .setDescription('Estimate your car value and submit car sold report.')

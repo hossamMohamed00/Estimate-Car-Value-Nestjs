@@ -22,8 +22,7 @@ const cookieSession = require('cookie-session');
       useFactory: (config: ConfigService) => {
         return {
           type: 'sqlite',
-          database: 'db.sqlite',
-          // database: config.get<string>('DB_NAME'),
+          database: config.get<string>('DB_NAME'),
           entities: [User, Report],
           synchronize: true
         };
