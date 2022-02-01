@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
  *? Auth guard will be called on some routes to protect them from anonymous users.
  */
 export class AuthGuard implements CanActivate {
-  canActivate(
+  canActivate( 
     context: ExecutionContext
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
