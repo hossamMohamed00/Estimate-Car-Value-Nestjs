@@ -46,16 +46,22 @@ export class ReportsController {
     return this.reportsService.create(body, user);
   }
 
+  @Patch('approve/all')
+  @UseGuards(AdminGuard)
+  approveAllReports() {
+    return this.reportsService.approveAllReports();
+  }
+
   /**
    * Change report approved status
    * @param id - Report id
    * @param body - Report details
    * @returns updated report
    */
-  @Patch('/:id')
+  @Patch('approve/:id')
   @UseGuards(AdminGuard)
   approveReport(@Param('id') id: string, @Body() body: ApproveReportDto) {
-    return this.reportsService.changeApproval(id, body.approved);
+    return this.reportsService.changeReportApproval(id, body.approved);
   }
 
   /**
@@ -63,7 +69,10 @@ export class ReportsController {
    * @query approved - Boolean
    */
   @Get()
-  getReportsByApprovalStatus(@Query('approved', ParseBoolPipe) approved: boolean) {
+  @UseGuards(AdminGuard)
+  getReportsByApprovalStatus(
+    @Query('approved', ParseBoolPipe) approved: boolean
+  ) {
     return this.reportsService.getReportsByApprovalStatus(approved);
   }
 }

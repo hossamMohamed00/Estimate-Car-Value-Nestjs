@@ -33,7 +33,7 @@ export class ReportsService {
    * @param body - Contains the approved property
    * @returns updated report instance
    */
-  async changeApproval(id: string, approved: boolean) {
+  async changeReportApproval(id: string, approved: boolean) {
     const report = await this.repo.findOne(id);
 
     if (!report) {
@@ -43,6 +43,14 @@ export class ReportsService {
     report.approved = approved;
 
     return this.repo.save(report);
+  }
+
+  async approveAllReports() {
+    const reports = await this.repo.find({ where: { approved: false } });
+
+    reports.forEach((report) => (report.approved = true));
+
+    return this.repo.save(reports);
   }
 
   /**
