@@ -45,6 +45,18 @@ export class ReportsService {
     return this.repo.save(report);
   }
 
+  /**
+   * Get an estimate for var value based on existing reports data.
+   * @param {
+   *     make,
+   *     model,
+   *     lat,
+   *     lng,
+   *     year,
+   *     mileage
+   *   }
+   * @returns Estimate Price
+   */
   async createEstimate({
     make,
     model,
@@ -66,5 +78,13 @@ export class ReportsService {
       .setParameters({ mileage })
       .limit(3)
       .getRawOne();
+  }
+
+  /**
+   * Gets all reports based on approval status.
+   * @returns list of un approved reports
+   */
+  async getReportsByApprovalStatus(approved: boolean) {
+    return this.repo.find({ where: { approved } });
   }
 }

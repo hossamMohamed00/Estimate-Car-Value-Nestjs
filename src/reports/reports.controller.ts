@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseBoolPipe,
   Patch,
   Post,
   Query,
@@ -30,7 +31,7 @@ export class ReportsController {
    * Get estimate about car based on car details provided
    * @query query - Dto of report
    */
-  @Get()
+  @Get('/estimate')
   getEstimate(@Query() query: GetEstimateDto) {
     return this.reportsService.createEstimate(query);
   }
@@ -55,5 +56,14 @@ export class ReportsController {
   @UseGuards(AdminGuard)
   approveReport(@Param('id') id: string, @Body() body: ApproveReportDto) {
     return this.reportsService.changeApproval(id, body.approved);
+  }
+
+  /**
+   * Get list of all un approved reports
+   * @query approved - Boolean
+   */
+  @Get()
+  getReportsByApprovalStatus(@Query('approved', ParseBoolPipe) approved: boolean) {
+    return this.reportsService.getReportsByApprovalStatus(approved);
   }
 }
