@@ -1,8 +1,8 @@
 {
   "name": "car-value",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Web app that accepts car details and based on saved reports return an estimate to the user",
+  "author": "Hossam Mohamed",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
