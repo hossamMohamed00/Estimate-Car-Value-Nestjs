@@ -46,6 +46,10 @@ export class ReportsController {
     return this.reportsService.create(body, user);
   }
 
+  /**
+   * Approve all reports onetime.
+   * @returns list of all approved reports.
+   */
   @Patch('approve/all')
   @UseGuards(AdminGuard)
   approveAllReports() {
